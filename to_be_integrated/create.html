@@ -1,0 +1,35 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h1>{% block title %} Create a New Vocable {% endblock %}</h1>
+
+<form method="post">
+    <div class="form-group">
+        <label for="title">english</label>
+        <input type="text" name="english"
+               placeholder="english translation" class="form-control"
+               value="{{ request.form['english'] }}"></input>
+    </div>
+	<div class="form-group">
+        <label for="title">german</label>
+        <input type="text" name="german"
+               placeholder="german translation" class="form-control"
+               value="{{ request.form['german'] }}"></input>
+    </div>
+	<div class="form-group">
+        <label for="title">dutch</label>
+        <input type="text" name="dutch"
+               placeholder="dutch translation" class="form-control"
+               value="{{ request.form['dutch'] }}"></input>
+    </div>
+	<div class="form-group">
+        <label for="title">spanish</label>
+        <input type="text" name="spanish"
+               placeholder="spanish translation" class="form-control"
+               value="{{ request.form['spanish'] }}"></input>
+    </div>
+    <div class="form-group">
+        <button type="submit" class="btn btn-outline-primary">Submit</button>
+    </div>
+</form>
+{% endblock %}
