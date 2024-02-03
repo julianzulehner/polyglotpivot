@@ -5,7 +5,7 @@ from flask_login import current_user, login_user, logout_user, login_required
 from urllib.parse import urlsplit
 import sqlalchemy as sa 
 from app import db 
-from app.models import User, Post
+from app.models import User, Post, Language
 from datetime import datetime, timezone
 
 @app.route('/')
@@ -17,14 +17,14 @@ def index():
         new_post = Post(body=form.post.data, author=current_user)
         db.session.add(new_post)
         db.session.commit()
-        flash("Post was added, successfully!")
+        flash("Post was added, successfully!", 'success')
         form.post.data = ""
         return redirect(url_for("index"))
     elif request.method == "GET":
         form.post.data = ""
     else:
         print(f"validate_on_submit: {form.validate_on_submit()}")
-    posts = db.session.scalars(sa.select(Post)).all()
+    posts = db.session.scalars(sa.select(Post).order_by(Post.timestamp.desc())).all()
     return render_template("index.html", title="Home", posts=posts, form=form)
 
 @app.route("/login", methods=["GET","POST"])
@@ -36,7 +36,7 @@ def login():
         query = sa.select(User).where(User.username == form.username.data)
         user = db.session.scalar(query)
         if user is None or not user.check_password(form.password.data):
-            flash('Invalid username or password')
+            flash('Invalid username or password', 'danger')
             return redirect(url_for('login'))
         login_user(user, remember=form.remember_me.data)
         next_page = request.args.get('next')
@@ -60,7 +60,7 @@ def register():
         user.set_password(form.password.data)
         db.session.add(user)
         db.session.commit()
-        flash('Contratulations, you are now a registered user!')
+        flash('Contratulations, you are now a registered user!', 'success')
         return redirect(url_for('login'))
     return render_template("register.html", form=form)
 
@@ -81,11 +81,13 @@ def before_request():
 @login_required
 def edit_profile(): 
     form = EditProfileForm()
+    languages = db.session.scalars(sa.select(Language.name)).all()
+    form.languages.choices = languages
     if form.validate_on_submit():
         current_user.username = form.username.data
         current_user.about_me = form.about_me.data
         db.session.commit()
-        flash("Your changes have been saved.")
+        flash("Your changes have been saved.", 'success')
         return redirect(url_for('edit_profile'))
     elif request.method == "GET":
         form.username.data = current_user.username

@@ -1,5 +1,5 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, PasswordField, BooleanField, SubmitField, TextAreaField
+from wtforms import StringField, PasswordField, BooleanField, SubmitField, TextAreaField, SelectMultipleField
 from wtforms.validators import Email, Length, DataRequired, EqualTo, ValidationError
 from app.models import User
 from app import db
@@ -33,7 +33,8 @@ class EditProfileForm(FlaskForm):
     username = StringField("Username", validators=[DataRequired()])
     about_me = TextAreaField("About me", validators=[Length(max=140)])
     submit = SubmitField("Submit")
+    languages = SelectMultipleField("Languages")
 
 class AddPostForm(FlaskForm):
-    post = TextAreaField("New Post",validators=[Length(max=140), DataRequired()])
+    post = TextAreaField("New Post",validators=[Length(max=500), DataRequired()])
     submit = SubmitField("Submit")

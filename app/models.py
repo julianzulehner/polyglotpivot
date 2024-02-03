@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 from datetime import datetime, timezone
 from werkzeug.security import check_password_hash, generate_password_hash
 from typing import Optional 
@@ -11,18 +13,10 @@ from hashlib import md5
 def load_user(id): 
     return db.session.get(User, int(id))
 
-
-class UserVocable(db.Model):
-    __tablename__ = "user_vocable"
-
-    user_id: so.Mapped[int] = so.mapped_column(sa.ForeignKey('user.id'), primary_key=True)
-    vocable_id: so.Mapped[int] = so.mapped_column(sa.ForeignKey('vocable.id'), primary_key=True)
-    nl_level: so.Mapped[int] = so.mapped_column( nullable=True, default=0)
-    en_level:  so.Mapped[int] = so.mapped_column( nullable=True, default=0)
-    fr_level:  so.Mapped[int] = so.mapped_column( nullable=True, default=0)
-    de_level:  so.Mapped[int] = so.mapped_column( nullable=True, default=0)
-    it_level:  so.Mapped[int] = so.mapped_column( nullable=True, default=0)
-    es_level:  so.Mapped[int] = so.mapped_column( nullable=True, default=0)
+user_language = sa.Table('user_language', 
+                     db.metadata, 
+                     sa.Column('user_id', sa.ForeignKey('user.id'), primary_key=True),
+                     sa.Column('language_id', sa.ForeignKey('language.id'), primary_key=True))
 
 
 class User(UserMixin, db.Model):
@@ -35,11 +29,11 @@ class User(UserMixin, db.Model):
     about_me: so.Mapped[Optional[str]] = so.mapped_column(sa.String(140))
     last_seen: so.Mapped[Optional[datetime]] = so.mapped_column(default=lambda: datetime.now(timezone.utc))
 
-    posts: so.WriteOnlyMapped['Post'] = so.relationship(back_populates='author')
-    vocables: so.WriteOnlyMapped['Vocable'] = so.relationship(
-        secondary=UserVocable,
-        
-    )
+    languages: so.Mapped[list['Language']]= so.relationship(
+        secondary=user_language, 
+        back_populates='users')
+
+    posts: so.Mapped[list['Post']]=so.relationship(back_populates='author')
     
     def __repr__(self) -> str:
         return f'<User {self.username}>'
@@ -55,18 +49,19 @@ class User(UserMixin, db.Model):
         return f"https://www.gravatar.com/avatar/{digest}?d=identicon&s={size}"
     
 
-class Post(db.Model):
-    __tablename__="post"
+class Language(db.Model):
+    __tablename__ = "language"
 
     id: so.Mapped[int] = so.mapped_column(primary_key=True)
-    body: so.Mapped[str] = so.mapped_column(sa.String(140))
-    timestamp: so.Mapped[datetime] = so.mapped_column(index=True, default=lambda: datetime.now(timezone.utc))
-    user_id: so.Mapped[int] = so.mapped_column(sa.ForeignKey(User.id), index=True)
-    
-    author: so.Mapped[User] = so.relationship(back_populates="posts")
+    iso: so.Mapped[str] = so.mapped_column(sa.String(length=2))
+    name: so.Mapped[str] = so.mapped_column(sa.String(length=50))
 
-    def __repr__(self) -> str:
-        return f"<Post {self.body}>"
+    users: so.Mapped[list['User']] = so.relationship(
+        secondary=user_language, 
+        back_populates='languages')
+
+    def __repr__(self):
+        return f"<language {self.name}>"
     
 
 class Vocable(db.Model):
@@ -81,7 +76,20 @@ class Vocable(db.Model):
     es: so.Mapped[str] = so.mapped_column(sa.String(length=100), nullable=True)
     is_common: so.Mapped[bool] = so.mapped_column(default=False)
     
+    def __repr__(self):
+        return f"<vocable {self.id}, english: {self.en}>"
+    
+class Post(db.Model):
+    __tablename__="post"
+
+    id: so.Mapped[int] = so.mapped_column(primary_key=True)
+    body: so.Mapped[str] = so.mapped_column(sa.String(500))
+    timestamp: so.Mapped[datetime] = so.mapped_column(index=True, default=lambda: datetime.now(timezone.utc))
+    user_id: so.Mapped[int] = so.mapped_column(sa.ForeignKey(User.id), index=True)
+
+    author: so.Mapped[User] = so.relationship(back_populates='posts')
+
     def __repr__(self) -> str:
-        return f"English: {self.en}, Commonly used: {self.is_common}"
+        return f"<Post {self.body}>"
     
 

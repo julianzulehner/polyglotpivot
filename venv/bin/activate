@@ -38,7 +38,7 @@ deactivate () {
 # unset irrelevant variables
 deactivate nondestructive
 
-VIRTUAL_ENV="/home/julian/repos/PolyglotPivot/venv"
+VIRTUAL_ENV="/home/julian/Repos/polyglotpivot/venv"
 export VIRTUAL_ENV
 
 _OLD_VIRTUAL_PATH="$PATH"

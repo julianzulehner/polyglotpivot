@@ -3,15 +3,26 @@
     <h1>Hello, {{ current_user.username }}!</h1>
     <form action="" method="post">
         {{ form.hidden_tag() }}
-        <p>{{ form.post.label }}<br>
-            {{ form.post(cols=50, rows=4) }}</p>
+        <p>{{ form.post.label(class="form-control-label") }}<br>
+            {{ form.post(class="form-control form-control-lg", cols=50, rows=4) }}</p>
         {% for error in form.post.errors %}
         <span style="color: red;">[{{ error }}]</span>
         {% endfor %}
         <p>{{ form.submit() }}</p>
     </form>
     <hr>
-    {% for post in posts %}
-        {% include "_post.html" %}
-    {% endfor %}
+    <div class="responsive-table">
+        <table class="table">
+            <thead>
+                <th>Author</th>
+                <th>Post</th>
+            </thead>
+            <tbody>
+                {% for post in posts %}
+                    {% include "_post.html" %}
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
 {% endblock %}
