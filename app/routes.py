@@ -1,6 +1,6 @@
 from app import app
 from flask import redirect, render_template, url_for, flash, request
-from app.forms import LoginForm, RegistrationForm, EditProfileForm, AddPostForm, AddVocableForm
+from app.forms import LoginForm, RegistrationForm, EditProfileForm, AddPostForm, AddVocableForm, PracticeForm
 from flask_login import current_user, login_user, logout_user, login_required
 from urllib.parse import urlsplit
 import sqlalchemy as sa 
@@ -118,3 +118,14 @@ def add_vocable():
         return redirect(url_for('vocabulary'))
     return render_template("add_vocable.html", form=form)
 
+@app.route("/practice", methods=["GET","POST"])
+@login_required
+def practice(): 
+    form = PracticeForm()
+    languages = current_user.languages
+    language_list = [l.name for l in languages]
+    form.source_language(choices=language_list)
+    form.target_language(choices=language_list)
+    if form.validate_on_submit():
+        pass
+    return render_template("practice.html", form=form)

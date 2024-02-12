@@ -1,5 +1,5 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, PasswordField, BooleanField, SubmitField, TextAreaField, SelectMultipleField
+from wtforms import StringField, PasswordField, BooleanField, SubmitField, TextAreaField, SelectMultipleField, SelectField
 from wtforms.validators import Email, Length, DataRequired, EqualTo, ValidationError
 from app.models import User
 from app import db
@@ -56,3 +56,8 @@ class AddVocableForm(FlaskForm):
     es = StringField('Spanish', validators=[Length(max=200)])
     submit = SubmitField("Submit")
     
+class PracticeForm(FlaskForm):
+    target_language = SelectField("Select Target Language")
+    source_language = SelectField("Select Source Language")
+    your_answer = StringField("Your Answer")
+    submit = SubmitField()
