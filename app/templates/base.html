@@ -19,10 +19,7 @@
             <span class="navbar-toggler-icon"></span>
         </button>
         <div class="collapse navbar-collapse" id="navbarNav">
-            <ul class="navbar-nav">
-              <li class="nav-item">
-                  <a class="nav-link text-white" href="#">Add</a>
-              </li>            
+            <ul class="navbar-nav">        
               <li class="nav-item active">
                 <a class="nav-link text-white" href="#">Vocabulary</a>
               </li>
@@ -40,6 +37,12 @@
                 <a class="nav-link text-white" href="{{url_for('register')}}">Register</a>
               </li>
               {% else %}
+              <li class="nav-item active"> 
+                <a class="nav-link text-white" href="{{url_for('vocabulary')}}">Your Vocabulary</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link text-white" href="{{url_for('add_vocable')}}">Add</a>
+              </li>    
               <li class="nav-item active"> 
                 <a class="nav-link text-white" href="{{url_for('edit_profile')}}">Edit Profile</a>
               </li>

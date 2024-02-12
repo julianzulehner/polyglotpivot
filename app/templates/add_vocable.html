@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h1>{% block title %} Create Vocable {% endblock %}</h1>
+
+<form method="post">
+    {{ form.hidden_tag() }}
+    {% for language in current_user.languages %}
+    <p>
+        {{ form[language.iso].label(class="form-control-label") }}<br>
+        {% if form[language.iso].errors %}
+            {{ form[language.iso](class="form-control form-control-lg is-invalid")}}
+            {% for error in form[language.iso].errors %}
+                <span>{{ error }}</span>
+            {% endfor %}
+        {% else %}
+            {{ form[language.iso](class="form-control form-control-lg")}}
+        {% endif %}
+    </p>
+   {% endfor %}
+    <p>
+        {{ form.submit()}}
+    </p>
+</form>
+{% endblock %}

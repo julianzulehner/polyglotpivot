@@ -4,8 +4,16 @@ from wtforms.validators import Email, Length, DataRequired, EqualTo, ValidationE
 from app.models import User
 from app import db
 import sqlalchemy as sa
+from wtforms.widgets import ListWidget, TableWidget, CheckboxInput
 
-
+class CustomSelectMultipleField(SelectMultipleField):
+    """
+    Customized class I would like to use for multiple select windows. 
+    TODO: configure customized class for multi select button
+    """
+    widget = ListWidget(prefix_label=False)
+    option_widget = CheckboxInput()
+    
 class LoginForm(FlaskForm):
     username = StringField("Username",validators=[DataRequired()])
     password = PasswordField("Password",validators=[DataRequired()])
@@ -33,8 +41,18 @@ class EditProfileForm(FlaskForm):
     username = StringField("Username", validators=[DataRequired()])
     about_me = TextAreaField("About me", validators=[Length(max=140)])
     submit = SubmitField("Submit")
-    languages = SelectMultipleField("Languages")
+    languages = SelectMultipleField("Select Your Languages")
 
 class AddPostForm(FlaskForm):
     post = TextAreaField("New Post",validators=[Length(max=500), DataRequired()])
     submit = SubmitField("Submit")
+
+class AddVocableForm(FlaskForm):
+    nl = StringField('Dutch', validators=[Length(max=200)])
+    de = StringField('German', validators=[Length(max=200)])
+    en = StringField('English', validators=[Length(max=200)])
+    fr = StringField('French', validators=[Length(max=200)])
+    it = StringField('Italian', validators=[Length(max=200)])
+    es = StringField('Spanish', validators=[Length(max=200)])
+    submit = SubmitField("Submit")
+    

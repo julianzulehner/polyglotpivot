@@ -29,7 +29,8 @@
 
     </p>
     <p>
-        {{ form.languages }}
+        {{ form.languages.label(class="form-control-label")}}<br>
+        {{ form.languages(class="form-control form-control-lg") }}
     </p>
     <p>
         {{ form.submit(class="btn btn-outline-info") }}

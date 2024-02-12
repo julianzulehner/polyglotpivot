@@ -1,0 +1,12 @@
+
+<tr>
+{% for language in current_user.languages %}
+    <td>
+        {{ vocable[language.iso] }}<br>
+        {% for i in range(vocable[language.iso + "_lvl"]) %}
+            <span class="dot"></span>
+        {% endfor %}
+
+    </td>
+{% endfor %}
+</tr>

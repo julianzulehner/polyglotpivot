@@ -1,11 +1,11 @@
 from app import app
 from flask import redirect, render_template, url_for, flash, request
-from app.forms import LoginForm, RegistrationForm, EditProfileForm, AddPostForm
+from app.forms import LoginForm, RegistrationForm, EditProfileForm, AddPostForm, AddVocableForm
 from flask_login import current_user, login_user, logout_user, login_required
 from urllib.parse import urlsplit
 import sqlalchemy as sa 
 from app import db 
-from app.models import User, Post, Language
+from app.models import User, Post, Language, Vocable
 from datetime import datetime, timezone
 
 @app.route('/')
@@ -81,11 +81,14 @@ def before_request():
 @login_required
 def edit_profile(): 
     form = EditProfileForm()
-    languages = db.session.scalars(sa.select(Language.name)).all()
-    form.languages.choices = languages
+    languages = db.session.scalars(sa.select(Language.name)).all() # get all available languages
+    form.languages.choices = languages # sets the available languages
+    form.languages.data = [l.name for l in current_user.languages] # preselect the languages the user already has
     if form.validate_on_submit():
+        form.languages.data = request.form.getlist('languages') # this updates the data according to the selection in the browser.
         current_user.username = form.username.data
         current_user.about_me = form.about_me.data
+        current_user.set_languages(form.languages.data)
         db.session.commit()
         flash("Your changes have been saved.", 'success')
         return redirect(url_for('edit_profile'))
@@ -93,3 +96,25 @@ def edit_profile():
         form.username.data = current_user.username
         form.about_me.data = current_user.about_me
     return render_template("edit_profile.html",title="Edit Profile", form=form)
+
+@app.route("/vocabulary",methods=["GET"])
+@login_required
+def vocabulary():
+    return render_template("vocabulary.html",title="Your Vocabulary")
+
+@app.route("/add_vocable", methods=["GET","POST"])
+@login_required
+def add_vocable():
+    form = AddVocableForm()
+    if form.validate_on_submit():
+        vocable_data = {}
+        for language in current_user.languages:
+            vocable_data[language.iso] = form[language.iso].data
+        new_vocable = Vocable(**vocable_data)
+        current_user.vocables.append(new_vocable)
+        db.session.add(new_vocable)
+        db.session.commit()
+        flash("New vocable was added successfully.","success")
+        return redirect(url_for('vocabulary'))
+    return render_template("add_vocable.html", form=form)
+
