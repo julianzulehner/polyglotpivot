@@ -36,8 +36,8 @@ class User(UserMixin, db.Model):
         back_populates='users')
     
     vocables: so.Mapped[list['Vocable']]=so.relationship(back_populates='user')
-
     posts: so.Mapped[list['Post']]=so.relationship(back_populates='author')
+    session: so.Mapped['Session'] = so.relationship(back_populates='user')
     
     def __repr__(self) -> str:
         return f'<User {self.username}>'
@@ -124,5 +124,23 @@ class Post(db.Model):
 
     def __repr__(self) -> str:
         return f"<Post {self.body}>"
+    
+
+class Session(db.Model):
+    __tablename__="session"
+
+    source_language: so.Mapped[str] = so.mapped_column(sa.String(20), nullable=True)
+    target_language: so.Mapped[str] = so.mapped_column(sa.String(20), nullable =True)
+    user_id: so.Mapped[int] = so.mapped_column(sa.ForeignKey(User.id), primary_key=True)
+    vocable_level: so.Mapped[int] = so.mapped_column(nullable=True)
+
+    user: so.Mapped[User] = so.relationship(back_populates="session")
+
+    def clear(self):
+        self.source_language = None
+        self.target_language = None
+        self.vocable_level = None 
+        db.session.commit()
+
     
 

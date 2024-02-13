@@ -1,10 +1,32 @@
 from flask_wtf import FlaskForm
 from wtforms import StringField, PasswordField, BooleanField, SubmitField, TextAreaField, SelectMultipleField, SelectField
-from wtforms.validators import Email, Length, DataRequired, EqualTo, ValidationError
+from wtforms.validators import Email, Length, DataRequired, EqualTo, ValidationError, NoneOf
 from app.models import User
 from app import db
 import sqlalchemy as sa
 from wtforms.widgets import ListWidget, TableWidget, CheckboxInput
+
+class NotEqualTo:
+    """
+    Compares the values of two fields.
+
+    :param fieldname:
+        The name of the other field to compare to.
+    :param message:
+        Error message to raise in case of a validation error. Can be
+        interpolated with `%(other_label)s` and `%(other_name)s` to provide a
+        more helpful error.
+    """
+
+    def __init__(self, fieldname, message=None):
+        self.fieldname = fieldname
+        self.message = message
+
+    def __call__(self, form, field):
+        other = form[self.fieldname]
+        if field.data == other.data:
+            raise ValidationError("Target language cannot be source language!")
+        
 
 class CustomSelectMultipleField(SelectMultipleField):
     """
@@ -55,9 +77,12 @@ class AddVocableForm(FlaskForm):
     it = StringField('Italian', validators=[Length(max=200)])
     es = StringField('Spanish', validators=[Length(max=200)])
     submit = SubmitField("Submit")
+
+
     
 class PracticeForm(FlaskForm):
-    target_language = SelectField("Select Target Language")
+    target_language = SelectField("Select Target Language", validators=[NotEqualTo("source_language")])
     source_language = SelectField("Select Source Language")
-    your_answer = StringField("Your Answer")
     submit = SubmitField()
+
+

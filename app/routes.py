@@ -1,11 +1,10 @@
-from app import app
+from app import app, db
 from flask import redirect, render_template, url_for, flash, request
 from app.forms import LoginForm, RegistrationForm, EditProfileForm, AddPostForm, AddVocableForm, PracticeForm
 from flask_login import current_user, login_user, logout_user, login_required
 from urllib.parse import urlsplit
 import sqlalchemy as sa 
-from app import db 
-from app.models import User, Post, Language, Vocable
+from app.models import User, Post, Language, Vocable, Session
 from datetime import datetime, timezone
 
 @app.route('/')
@@ -47,6 +46,7 @@ def login():
     
 @app.route('/logout')
 def logout():
+    current_user.session.clear()
     logout_user()
     return redirect(url_for('index'))
 
@@ -58,6 +58,8 @@ def register():
     if form.validate_on_submit():
         user = User(username=form.username.data, email=form.email.data)
         user.set_password(form.password.data)
+        session = Session()
+        user.session = session
         db.session.add(user)
         db.session.commit()
         flash('Contratulations, you are now a registered user!', 'success')
@@ -124,8 +126,11 @@ def practice():
     form = PracticeForm()
     languages = current_user.languages
     language_list = [l.name for l in languages]
-    form.source_language(choices=language_list)
-    form.target_language(choices=language_list)
+    form.source_language.choices=language_list
+    form.target_language.choices=language_list
     if form.validate_on_submit():
-        pass
+        current_user.session.source_language = form.source_language.data
+        current_user.session.target_language = form.source_language.data
+        db.session.commit()
+        return redirect(url_for("practice"))
     return render_template("practice.html", form=form)
