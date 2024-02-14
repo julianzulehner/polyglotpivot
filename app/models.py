@@ -106,8 +106,17 @@ class Vocable(db.Model):
         return f"<Vocable {self.id}, English: {self.en}>"
     
     def rise_level(self, language:Language):
-        self[language.iso + "_lvl"] +=1
-        db.session.commit()
+        current_level = self.__getattribute__(language.iso + "_lvl")
+        if current_level < 6:
+            self.__setattr__(language.iso + "_lvl", current_level+1)
+            db.session.commit()
+
+    def check_result(self, answer:str, targetlanguage:Language):
+        if answer == self.__getattribute__(targetlanguage.iso): 
+            self.rise_level(targetlanguage)
+            return True
+        return False 
+
 
     
         

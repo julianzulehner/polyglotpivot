@@ -1,6 +1,6 @@
 from app import app, db
 from flask import redirect, render_template, url_for, flash, request
-from app.forms import LoginForm, RegistrationForm, EditProfileForm, AddPostForm, AddVocableForm, PracticeForm
+from app.forms import LoginForm, RegistrationForm, EditProfileForm, AddPostForm, AddVocableForm, PracticeForm, ConfigPracticeForm
 from flask_login import current_user, login_user, logout_user, login_required
 from urllib.parse import urlsplit
 import sqlalchemy as sa 
@@ -123,14 +123,30 @@ def add_vocable():
 @app.route("/practice", methods=["GET","POST"])
 @login_required
 def practice(): 
-    form = PracticeForm()
-    languages = current_user.languages
-    language_list = [l.name for l in languages]
-    form.source_language.choices=language_list
-    form.target_language.choices=language_list
-    if form.validate_on_submit():
-        current_user.session.source_language = form.source_language.data
-        current_user.session.target_language = form.source_language.data
-        db.session.commit()
-        return redirect(url_for("practice"))
-    return render_template("practice.html", form=form)
+    target_language = None 
+    vocable = None 
+    if not current_user.session.target_language:
+        form = ConfigPracticeForm()
+        languages = current_user.languages
+        language_list = [l.name for l in languages]
+        form.source_language.choices=language_list
+        form.target_language.choices=language_list
+        if form.validate_on_submit():
+            current_user.session.source_language = db.session.scalar(sa.select(Language.iso).where(Language.name == form.source_language.data))
+            current_user.session.target_language = db.session.scalar(sa.select(Language.iso).where(Language.name == form.target_language.data))
+            db.session.commit()
+            return redirect(url_for("practice"))
+    else:
+        form = PracticeForm()
+        target_language = db.session.scalar(sa.select(Language).where(Language.iso == current_user.session.target_language))
+        vocable = User.get_random_vocable(current_user, target_language)
+        if form.validate_on_submit():
+            answer = form.your_answer.data
+            answer_correct = vocable.check_result(answer, target_language)
+            if answer_correct:
+                flash("Your answer was correct!", "success")
+            else: 
+                flash(f"The correct answer would be {vocable.__getattribute__(target_language.iso)}.", "danger")
+            return redirect("index")
+            
+    return render_template("practice.html", form=form, vocable=vocable, target_language=target_language)

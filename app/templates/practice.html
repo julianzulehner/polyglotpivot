@@ -24,7 +24,16 @@
             {{ form.submit(class="btn btn-outline-info")}}
         </p>
     {% else %}
-
+        <form action="" method="post" novalidate>
+            <p>
+                {{ vocable.__getattribute__(current_user.session.source_language) }}
+            </p>
+            <p>
+                Give translation in {{ target_language.name }}:
+                {{ form.your_answer(class="form-control-lg form-control")}}
+            </p>
+            <p>{{ form.submit(class="btn btn-outline-info") }}</p>
+        </form>
     {% endif%}
     
 </form>

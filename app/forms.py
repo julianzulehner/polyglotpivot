@@ -80,9 +80,14 @@ class AddVocableForm(FlaskForm):
 
 
     
-class PracticeForm(FlaskForm):
+class ConfigPracticeForm(FlaskForm):
     target_language = SelectField("Select Target Language", validators=[NotEqualTo("source_language")])
     source_language = SelectField("Select Source Language")
     submit = SubmitField()
+
+class PracticeForm(FlaskForm):
+    your_answer = TextAreaField("Your Answer",validators=[Length(max=200)])
+    submit = SubmitField()
+
 
 
