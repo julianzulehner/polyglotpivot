@@ -60,9 +60,9 @@ class User(UserMixin, db.Model):
     def get_random_vocable(self, language:Language, level=None):
 
         if level:
-            return db.session.query(Vocable).filter(getattr(Vocable, language.iso + "_lvl") == level).order_by(func.random()).first()
+            return db.session.query(Vocable.id).filter(getattr(Vocable, language.iso + "_lvl") == level).order_by(func.random()).first()[0]
         else:
-            return db.session.query(Vocable).order_by(func.random()).first()
+            return db.session.query(Vocable.id).order_by(func.random()).first()[0]
 
     
 
@@ -138,18 +138,22 @@ class Post(db.Model):
 class Session(db.Model):
     __tablename__="session"
 
-    source_language: so.Mapped[str] = so.mapped_column(sa.String(20), nullable=True)
-    target_language: so.Mapped[str] = so.mapped_column(sa.String(20), nullable =True)
     user_id: so.Mapped[int] = so.mapped_column(sa.ForeignKey(User.id), primary_key=True)
+    source_language_id: so.Mapped[str] = so.mapped_column(nullable=True)
+    target_language_id: so.Mapped[str] = so.mapped_column(nullable =True)    
+    vocable_id: so.Mapped[str] = so.mapped_column(nullable=True)
     vocable_level: so.Mapped[int] = so.mapped_column(nullable=True)
 
     user: so.Mapped[User] = so.relationship(back_populates="session")
 
     def clear(self):
-        self.source_language = None
-        self.target_language = None
+        self.source_language_id = None
+        self.target_language_id = None
+        self.vocable_id = None
         self.vocable_level = None 
         db.session.commit()
+
+    
 
     
 

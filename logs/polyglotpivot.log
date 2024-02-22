@@ -1,0 +1,49 @@
+2024-02-20 20:09:24,672 INFO: Polyglotpivot startup [in /home/julian/Repos/polyglotpivot/app/__init__.py:46]
+2024-02-22 21:10:44,826 INFO: Polyglotpivot startup [in /home/julian/Repos/polyglotpivot/app/__init__.py:46]
+2024-02-22 21:11:25,252 ERROR: Exception on /user/Ana [GET] [in /home/julian/Repos/polyglotpivot/venv/lib/python3.10/site-packages/flask/app.py:828]
+Traceback (most recent call last):
+  File "/home/julian/Repos/polyglotpivot/venv/lib/python3.10/site-packages/flask/app.py", line 1463, in wsgi_app
+    response = self.full_dispatch_request()
+  File "/home/julian/Repos/polyglotpivot/venv/lib/python3.10/site-packages/flask/app.py", line 872, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+  File "/home/julian/Repos/polyglotpivot/venv/lib/python3.10/site-packages/flask/app.py", line 870, in full_dispatch_request
+    rv = self.dispatch_request()
+  File "/home/julian/Repos/polyglotpivot/venv/lib/python3.10/site-packages/flask/app.py", line 855, in dispatch_request
+    return self.ensure_sync(self.view_functions[rule.endpoint])(**view_args)  # type: ignore[no-any-return]
+  File "/home/julian/Repos/polyglotpivot/venv/lib/python3.10/site-packages/flask_login/utils.py", line 290, in decorated_view
+    return current_app.ensure_sync(func)(*args, **kwargs)
+  File "/home/julian/Repos/polyglotpivot/app/routes.py", line 73, in user
+    posts = db.session.scalars(user.posts.select()).all()
+AttributeError: 'InstrumentedList' object has no attribute 'select'
+2024-02-22 22:27:14,769 INFO: Polyglotpivot startup [in /home/julian/Repos/polyglotpivot/app/__init__.py:44]
+2024-02-22 22:27:32,532 ERROR: Exception on /user/Ana [GET] [in /home/julian/Repos/polyglotpivot/venv/lib/python3.10/site-packages/flask/app.py:828]
+Traceback (most recent call last):
+  File "/home/julian/Repos/polyglotpivot/venv/lib/python3.10/site-packages/flask/app.py", line 1463, in wsgi_app
+    response = self.full_dispatch_request()
+  File "/home/julian/Repos/polyglotpivot/venv/lib/python3.10/site-packages/flask/app.py", line 872, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+  File "/home/julian/Repos/polyglotpivot/venv/lib/python3.10/site-packages/flask/app.py", line 870, in full_dispatch_request
+    rv = self.dispatch_request()
+  File "/home/julian/Repos/polyglotpivot/venv/lib/python3.10/site-packages/flask/app.py", line 855, in dispatch_request
+    return self.ensure_sync(self.view_functions[rule.endpoint])(**view_args)  # type: ignore[no-any-return]
+  File "/home/julian/Repos/polyglotpivot/venv/lib/python3.10/site-packages/flask_login/utils.py", line 290, in decorated_view
+    return current_app.ensure_sync(func)(*args, **kwargs)
+  File "/home/julian/Repos/polyglotpivot/app/routes.py", line 73, in user
+    posts = db.session.scalars(user.posts.select()).all()
+AttributeError: 'InstrumentedList' object has no attribute 'select'
+2024-02-22 22:38:51,258 INFO: Polyglotpivot startup [in /home/julian/Repos/polyglotpivot/app/__init__.py:44]
+2024-02-22 22:39:08,933 ERROR: Exception on /user/Ana [GET] [in /home/julian/Repos/polyglotpivot/venv/lib/python3.10/site-packages/flask/app.py:828]
+Traceback (most recent call last):
+  File "/home/julian/Repos/polyglotpivot/venv/lib/python3.10/site-packages/flask/app.py", line 1463, in wsgi_app
+    response = self.full_dispatch_request()
+  File "/home/julian/Repos/polyglotpivot/venv/lib/python3.10/site-packages/flask/app.py", line 872, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+  File "/home/julian/Repos/polyglotpivot/venv/lib/python3.10/site-packages/flask/app.py", line 870, in full_dispatch_request
+    rv = self.dispatch_request()
+  File "/home/julian/Repos/polyglotpivot/venv/lib/python3.10/site-packages/flask/app.py", line 855, in dispatch_request
+    return self.ensure_sync(self.view_functions[rule.endpoint])(**view_args)  # type: ignore[no-any-return]
+  File "/home/julian/Repos/polyglotpivot/venv/lib/python3.10/site-packages/flask_login/utils.py", line 290, in decorated_view
+    return current_app.ensure_sync(func)(*args, **kwargs)
+  File "/home/julian/Repos/polyglotpivot/app/routes.py", line 73, in user
+    posts = db.session.scalars(user.posts.select()).all()
+AttributeError: 'InstrumentedList' object has no attribute 'select'

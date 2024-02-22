@@ -4,7 +4,7 @@ from wtforms.validators import Email, Length, DataRequired, EqualTo, ValidationE
 from app.models import User
 from app import db
 import sqlalchemy as sa
-from wtforms.widgets import ListWidget, TableWidget, CheckboxInput
+from wtforms.widgets import ListWidget, TableWidget, CheckboxInput, TextArea
 
 class NotEqualTo:
     """
@@ -86,8 +86,10 @@ class ConfigPracticeForm(FlaskForm):
     submit = SubmitField()
 
 class PracticeForm(FlaskForm):
-    your_answer = TextAreaField("Your Answer",validators=[Length(max=200)])
+    your_answer = StringField("Your Answer",validators=[Length(max=200)], widget=TextArea())
     submit = SubmitField()
 
+class EmptyForm(FlaskForm):
+    submit = SubmitField()
 
 

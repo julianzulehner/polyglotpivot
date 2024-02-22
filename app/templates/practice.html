@@ -1,40 +1,23 @@
 {% extends "base.html"%}
 {% block content %}
+
 <form action="" method="post" novalidate>
     {{ form.hidden_tag() }}
-
-    {% if not current_user.session.target_language %}
-        <p>
-            {{ form.source_language.label(class="form-control-label") }} 
-            {{ form.source_language(class="form-control-lg form-control") }}
-        </p>
-        <p>
-            {% if form.target_language.errors %}
-                {{ form.target_language.label(class="form-control-label") }} 
-                {{ form.target_language(class="form-control-lg form-control is-invalid") }}
-                {% for error in form.target_language.errors %}
-                <span> {{ error }} </span>
-                {% endfor %}
-            {% else %}
-                {{ form.target_language.label(class="form-control-label") }} 
-                {{ form.target_language(class="form-control-lg form-control") }}
-            {% endif %}
-        </p>
-        <p>
-            {{ form.submit(class="btn btn-outline-info")}}
-        </p>
-    {% else %}
-        <form action="" method="post" novalidate>
-            <p>
-                {{ vocable.__getattribute__(current_user.session.source_language) }}
-            </p>
-            <p>
-                Give translation in {{ target_language.name }}:
-                {{ form.your_answer(class="form-control-lg form-control")}}
-            </p>
-            <p>{{ form.submit(class="btn btn-outline-info") }}</p>
-        </form>
-    {% endif%}
+    <p>
+        {% if vocable %}
+        Translate "{{ vocable.__getattribute__(source_language.iso) }}" to {{ target_language.name }}
+        {% else %}   
+        Press New Vocable to start.
+        {% endif %}
+        <a href={{ url_for('config_practice') }} class="badge text-bg-secondary">Change Language</a>
+    </p>
+    <p>
+        {{ form.your_answer(class="form-control-lg form-control")}}
+    </p>
+    <p>
+        {{ form.submit(class="btn btn-outline-info") }}
+        <a href={{ url_for('new_vocable') }} class="btn btn-outline-info">New Vocable</a>
+    </p>
     
 </form>
 {% endblock %}

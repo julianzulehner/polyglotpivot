@@ -1,6 +1,6 @@
 from app import app, db
 from flask import redirect, render_template, url_for, flash, request
-from app.forms import LoginForm, RegistrationForm, EditProfileForm, AddPostForm, AddVocableForm, PracticeForm, ConfigPracticeForm
+from app.forms import LoginForm, RegistrationForm, EditProfileForm, AddPostForm, AddVocableForm, PracticeForm, ConfigPracticeForm, EmptyForm
 from flask_login import current_user, login_user, logout_user, login_required
 from urllib.parse import urlsplit
 import sqlalchemy as sa 
@@ -123,30 +123,47 @@ def add_vocable():
 @app.route("/practice", methods=["GET","POST"])
 @login_required
 def practice(): 
-    target_language = None 
-    vocable = None 
-    if not current_user.session.target_language:
-        form = ConfigPracticeForm()
-        languages = current_user.languages
-        language_list = [l.name for l in languages]
-        form.source_language.choices=language_list
-        form.target_language.choices=language_list
-        if form.validate_on_submit():
-            current_user.session.source_language = db.session.scalar(sa.select(Language.iso).where(Language.name == form.source_language.data))
-            current_user.session.target_language = db.session.scalar(sa.select(Language.iso).where(Language.name == form.target_language.data))
-            db.session.commit()
-            return redirect(url_for("practice"))
-    else:
-        form = PracticeForm()
-        target_language = db.session.scalar(sa.select(Language).where(Language.iso == current_user.session.target_language))
-        vocable = User.get_random_vocable(current_user, target_language)
-        if form.validate_on_submit():
-            answer = form.your_answer.data
-            answer_correct = vocable.check_result(answer, target_language)
-            if answer_correct:
-                flash("Your answer was correct!", "success")
-            else: 
-                flash(f"The correct answer would be {vocable.__getattribute__(target_language.iso)}.", "danger")
-            return redirect("index")
-            
-    return render_template("practice.html", form=form, vocable=vocable, target_language=target_language)
+    form = PracticeForm()
+    result = None
+    vocable = None
+
+    if not current_user.session.target_language_id:
+        return redirect(url_for("config_practice"))
+    
+    vocable = db.session.get(Vocable, current_user.session.vocable_id)
+    target_language = db.session.get(Language, current_user.session.target_language_id) 
+    source_language = db.session.get(Language, current_user.session.source_language_id) 
+    if form.submit.data and form.validate():
+        if not current_user.session.vocable_id:
+            redirect(url_for("new_vocable"))
+
+        result = vocable.check_result(form.your_answer.data, target_language) 
+        if result:
+            flash("Your answer is correct!", "success")
+        else: 
+            flash(f"The right answer would be: {vocable.__getattribute__(target_language.iso)}.", "danger") 
+      
+    return render_template("practice.html",form=form,target_language = target_language, source_language = source_language, vocable=vocable)
+
+@app.route("/config_practice", methods=["GET","POST"])
+@login_required
+def config_practice():
+    form = ConfigPracticeForm()
+    languages = current_user.languages
+    language_list = [l.name for l in languages]
+    form.source_language.choices=language_list
+    form.target_language.choices=language_list
+    if form.validate_on_submit():
+        current_user.session.source_language_id = db.session.scalar(sa.select(Language.id).where(Language.name == form.source_language.data))
+        current_user.session.target_language_id = db.session.scalar(sa.select(Language.id).where(Language.name == form.target_language.data))
+        db.session.commit()
+        return redirect(url_for("practice"))
+    return render_template("config_practice.html", form=form)
+
+@app.route("/new_vocable", methods=["GET"])
+@login_required
+def new_vocable():
+    target_language = db.session.get(Language, current_user.session.target_language_id)
+    current_user.session.vocable_id = current_user.get_random_vocable(target_language)
+    db.session.commit()
+    return redirect(url_for("practice"))

@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+
+{% block content %}
+<form action="" method="post" novalidate>
+    {{ form.hidden_tag() }}
+    <p>
+        {{ form.source_language.label(class="form-control-label") }} 
+        {{ form.source_language(class="form-control-lg form-control") }}
+    </p>
+    <p>
+        {% if form.target_language.errors %}
+            {{ form.target_language.label(class="form-control-label") }} 
+            {{ form.target_language(class="form-control-lg form-control is-invalid") }}
+            {% for error in form.target_language.errors %}
+            <span> {{ error }} </span>
+            {% endfor %}
+        {% else %}
+            {{ form.target_language.label(class="form-control-label") }} 
+            {{ form.target_language(class="form-control-lg form-control") }}
+        {% endif %}
+    </p>
+    <p>
+        {{ form.submit(class="btn btn-outline-info")}}
+    </p>
+</form>
+{% endblock %}
