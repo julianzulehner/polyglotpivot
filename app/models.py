@@ -139,9 +139,9 @@ class Session(db.Model):
     __tablename__="session"
 
     user_id: so.Mapped[int] = so.mapped_column(sa.ForeignKey(User.id), primary_key=True)
-    source_language_id: so.Mapped[str] = so.mapped_column(nullable=True)
-    target_language_id: so.Mapped[str] = so.mapped_column(nullable =True)    
-    vocable_id: so.Mapped[str] = so.mapped_column(nullable=True)
+    source_language_id: so.Mapped[str] = so.mapped_column(sa.String(length=50),nullable=True)
+    target_language_id: so.Mapped[str] = so.mapped_column(sa.String(length=50),nullable=True)    
+    vocable_id: so.Mapped[int] = so.mapped_column(nullable=True)
     vocable_level: so.Mapped[int] = so.mapped_column(nullable=True)
 
     user: so.Mapped[User] = so.relationship(back_populates="session")

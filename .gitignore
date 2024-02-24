@@ -1,4 +1,6 @@
+certs/
 venv/
+.env
 app.db
 logs/**
 *.pyc
