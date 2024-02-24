@@ -9,7 +9,6 @@ from datetime import datetime, timezone
 
 @app.route('/')
 @app.route('/index', methods=["GET","POST"])
-@login_required
 def index():
     form = AddPostForm()
     if form.validate_on_submit():

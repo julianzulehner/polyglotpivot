@@ -23,13 +23,13 @@
               {% if current_user.is_anonymous %}
               {% else %}     
               <li class="nav-item active"> 
-                <a class="nav-link text-white" href="{{url_for('vocabulary')}}">Your Vocabulary</a>
+                <a class="nav-link text-white" href="#">Your Vocabulary</a>
               </li>
               <li class="nav-item active"> 
-                <a class="nav-link text-white" href="{{url_for('practice')}}">Practice</a>
+                <a class="nav-link text-white" href="#">Practice</a>
               </li>
               <li class="nav-item">
-                <a class="nav-link text-white" href="{{url_for('add_vocable')}}">Add</a>
+                <a class="nav-link text-white" href="#">Add</a>
               </li> 
               {% endif %}
             </ul>
@@ -38,17 +38,17 @@
             <ul class="navbar-nav ml-auto">
               {% if current_user.is_anonymous %}
               <li class="nav-item active"> 
-                <a class="nav-link text-white" href="{{url_for('login')}}">Login</a>
+                <a class="nav-link text-white" href="#">Login</a>
               </li>
               <li class="nav-item active"> 
-                <a class="nav-link text-white" href="{{url_for('register')}}">Register</a>
+                <a class="nav-link text-white" href="#">Register</a>
               </li>
               {% else %}   
               <li class="nav-item active"> 
-                <a class="nav-link text-white" href="{{url_for('edit_profile')}}">Edit Profile</a>
+                <a class="nav-link text-white" href="#">Edit Profile</a>
               </li>
               <li class="nav-item active"> 
-                <a class="nav-link text-white" href="{{url_for('logout')}}">Logout</a>
+                <a class="nav-link text-white" href="#">Logout</a>
               </li>
               {% endif %}
             </ul>
