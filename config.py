@@ -1,7 +1,7 @@
 import os
 basedir = os.path.abspath(os.path.dirname(__file__))
 
-# This is the config of my temporary branch
+# This is the config of my main branch
 
 class Config: 
     SECRET_KEY = os.environ.get("SECRET_KEY") or '5ce75b535d368562838b7f6cac05b344'
