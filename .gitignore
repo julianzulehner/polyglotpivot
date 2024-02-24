@@ -1,4 +1,6 @@
-src/.venv/
+venv
+app.db
+logs
 *.pyc
 *.sqlite
 .DS_Store
