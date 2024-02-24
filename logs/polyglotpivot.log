@@ -47,3 +47,37 @@ Traceback (most recent call last):
   File "/home/julian/Repos/polyglotpivot/app/routes.py", line 73, in user
     posts = db.session.scalars(user.posts.select()).all()
 AttributeError: 'InstrumentedList' object has no attribute 'select'
+2024-02-24 00:54:57,652 INFO: Polyglotpivot startup [in /home/julian/Repos/polyglotpivot/app/__init__.py:46]
+2024-02-24 00:55:01,190 ERROR: Exception on /login [GET] [in /home/julian/Repos/polyglotpivot/venv/lib/python3.10/site-packages/flask/app.py:828]
+Traceback (most recent call last):
+  File "/home/julian/Repos/polyglotpivot/venv/lib/python3.10/site-packages/flask/app.py", line 1463, in wsgi_app
+    response = self.full_dispatch_request()
+  File "/home/julian/Repos/polyglotpivot/venv/lib/python3.10/site-packages/flask/app.py", line 872, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+  File "/home/julian/Repos/polyglotpivot/venv/lib/python3.10/site-packages/flask/app.py", line 870, in full_dispatch_request
+    rv = self.dispatch_request()
+  File "/home/julian/Repos/polyglotpivot/venv/lib/python3.10/site-packages/flask/app.py", line 855, in dispatch_request
+    return self.ensure_sync(self.view_functions[rule.endpoint])(**view_args)  # type: ignore[no-any-return]
+  File "/home/julian/Repos/polyglotpivot/app/routes.py", line 45, in login
+    return render_template("login.html",title="Sign In",form=form)
+  File "/home/julian/Repos/polyglotpivot/venv/lib/python3.10/site-packages/flask/templating.py", line 150, in render_template
+    return _render(app, template, context)
+  File "/home/julian/Repos/polyglotpivot/venv/lib/python3.10/site-packages/flask/templating.py", line 131, in _render
+    rv = template.render(context)
+  File "/home/julian/Repos/polyglotpivot/venv/lib/python3.10/site-packages/jinja2/environment.py", line 1301, in render
+    self.environment.handle_exception()
+  File "/home/julian/Repos/polyglotpivot/venv/lib/python3.10/site-packages/jinja2/environment.py", line 936, in handle_exception
+    raise rewrite_traceback_stack(source=source)
+  File "/home/julian/Repos/polyglotpivot/app/templates/login.html", line 1, in top-level template code
+    {% extends 'base.html'%}
+  File "/home/julian/Repos/polyglotpivot/app/templates/base.html", line 68, in top-level template code
+    {% block content %} {% endblock %}
+  File "/home/julian/Repos/polyglotpivot/app/templates/login.html", line 36, in block 'content'
+    <a class="badge text-bg-secondary" href="{{ url_for('reset_password_request') }}">Forgot Password?</a>
+  File "/home/julian/Repos/polyglotpivot/venv/lib/python3.10/site-packages/flask/app.py", line 1074, in url_for
+    return self.handle_url_build_error(error, endpoint, values)
+  File "/home/julian/Repos/polyglotpivot/venv/lib/python3.10/site-packages/flask/app.py", line 1063, in url_for
+    rv = url_adapter.build(  # type: ignore[union-attr]
+  File "/home/julian/Repos/polyglotpivot/venv/lib/python3.10/site-packages/werkzeug/routing/map.py", line 919, in build
+    raise BuildError(endpoint, values, method, self)
+werkzeug.routing.exceptions.BuildError: Could not build url for endpoint 'reset_password_request'. Did you mean 'edit_profile' instead?

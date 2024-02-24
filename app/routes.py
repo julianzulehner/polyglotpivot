@@ -167,3 +167,7 @@ def new_vocable():
     current_user.session.vocable_id = current_user.get_random_vocable(target_language)
     db.session.commit()
     return redirect(url_for("practice"))
+
+@app.route("/reset_password_request", methods=["GET","POST"])
+def reset_password_request():
+    return render_template("reset_password_request.html")
