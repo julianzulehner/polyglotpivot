@@ -8,7 +8,7 @@ import logging
 from logging.handlers import SMTPHandler, RotatingFileHandler 
 import os
 
-print(f"Database URI: {os.environ.get('SQLALCHEMY_DATABASE_URI')}")
+print(f"Database URI: {os.environ.get('DATABASE_URL')}")
 
 app = Flask(__name__)
 app.config.from_object(Config)
