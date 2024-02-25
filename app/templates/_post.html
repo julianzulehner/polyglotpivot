@@ -1,7 +1,8 @@
 <tr>
     <!-- <td><img src="{{ post.author.avatar(60) }}"></td> -->
     <td>
-        <a href="{{ url_for('user', username=post.author.username) }}"><span class="badge badge-primary">{{ post.author.username }}</span></a>
+        <a href="#"><span class="badge badge-primary">{{ post.author.username }}</span></a>
+        <!-- TODO Repair the link to user <a href="{{ url_for('user', username=post.author.username) }}"><span class="badge badge-primary">{{ post.author.username }}</span></a> -->
     </td>
     <td>
         {{ post.body }}
