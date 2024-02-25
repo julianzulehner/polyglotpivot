@@ -7,6 +7,7 @@
 				{% for language in current_user.languages %}
 					<th>{{ language.name }}</th>
 				{% endfor %}	
+					<th></th>
 			</tr>
 			{% for vocable in current_user.vocables %}
 				{% include "_vocable.html" %}

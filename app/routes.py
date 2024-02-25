@@ -116,7 +116,7 @@ def add_vocable():
         db.session.add(new_vocable)
         db.session.commit()
         flash("New vocable was added successfully.","success")
-        return redirect(url_for('vocabulary'))
+        return redirect(url_for('add_vocable'))
     return render_template("add_vocable.html", form=form)
 
 @app.route("/practice", methods=["GET","POST"])
@@ -170,3 +170,22 @@ def new_vocable():
 @app.route("/reset_password_request", methods=["GET","POST"])
 def reset_password_request():
     return render_template("reset_password_request.html")
+
+@app.route("/edit_vocable/<vocable_id>", methods=["GET", "POST"])
+@login_required
+def edit_vocable(vocable_id):
+    vocable = db.session.get(Vocable, vocable_id)
+    if vocable.user == current_user:
+        form = AddVocableForm(obj=vocable)  # Populate the form with existing data
+
+        if form.validate_on_submit():
+            
+            # Update the existing vocable with the new form data
+            for language in current_user.languages:
+                vocable.__setattr__(language.iso, form[language.iso].data)
+            db.session.commit()
+            flash("Vocable was successfully updated.", "success")
+            return redirect(url_for("vocabulary"))  # Adjust the redirect URL as needed
+    else:
+        return redirect(url_for("index"))
+    return render_template("edit_vocable.html", form=form)
