@@ -9,7 +9,7 @@
             {% for error in form.post.errors %}
             <span style="color: red;">[{{ error }}]</span>
             {% endfor %}
-            <p>{{ form.submit() }}</p>
+            <p>{{ form.submit(class="btn btn-outline-info") }}</p>
         </form>
         <hr>
         <div class="responsive-table">
@@ -27,6 +27,20 @@
         </div>
     {% else %}
         <h1> Welcome to Polyglotpivot </h1>
-        <p> This website is under active development. </p>
+        <p> 
+            Do you speak multiple languages or want to? Then you are in the right place.
+            Polyglotpivot gives you the possibility to keep track of your vocabulary. 
+            You can add your own vocabulary and practice them. 
+        </p>
+        <p>
+            Polyglotpivot is also a place to exchange with other language students. You can 
+            share your experiences, expressions or a funny story of your last vacation. Everything
+            is allowed - just be respectfull.
+        </p>
+        <p>
+            To start, just register an account and you can directly start. It is free, so there is no 
+            reason to hesitate. Try it out now. <br>
+        </p>
+        <a href="{{url_for('register')}}"><span class="btn btn-outline-info">Register Here</span></a>
     {% endif %}
 {% endblock %}

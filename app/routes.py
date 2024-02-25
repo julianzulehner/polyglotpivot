@@ -12,6 +12,15 @@ from app.email import send_password_reset_email
 @app.route('/')
 @app.route('/index', methods=["GET","POST"])
 def index():
+    if current_user.is_authenticated:
+        if not current_user.languages:
+            flash(f"Hi {current_user.username}. Nice to see a new face here. \
+                  You can configure your profile on this page. If you want you can \
+                  Write some nice words about you.\
+                  Also, select the languages you would like to study. \
+                  You can come back and change your settings anytime. \
+                  Welcome to the Polyglotpivot community.", "info")
+            return redirect(url_for('edit_profile'))
     form = AddPostForm()
     if form.validate_on_submit():
         new_post = Post(body=form.post.data, author=current_user)
@@ -20,10 +29,8 @@ def index():
         flash("Post was added, successfully!", 'success')
         form.post.data = ""
         return redirect(url_for("index"))
-    elif request.method == "GET":
-        form.post.data = ""
     else:
-        print(f"validate_on_submit: {form.validate_on_submit()}")
+        flash("This website is under active development.","info")
     posts = db.session.scalars(sa.select(Post).order_by(Post.timestamp.desc())).all()
     return render_template("index.html", title="Home", posts=posts, form=form)
 
