@@ -6,10 +6,12 @@ from typing import Optional
 import sqlalchemy as sa 
 import sqlalchemy.orm as so
 from flask_login import UserMixin
-from app import db, login
+from app import db, login, app
 from hashlib import md5
 import random
 from sqlalchemy.sql.expression import func 
+from time import time
+import jwt
 
 @login.user_loader 
 def load_user(id): 
@@ -64,7 +66,18 @@ class User(UserMixin, db.Model):
         else:
             return db.session.query(Vocable.id).order_by(func.random()).first()[0]
 
+    def get_reset_password_token(self, expires_in=600):
+        return jwt.encode({'reset_password':self.id, 'exp':time()+ expires_in},
+                          app.config['SECRET_KEY'], algorithm='HS256')
     
+    @staticmethod
+    def verify_reset_password_token(token):
+        try:
+            id = jwt.decode(token, app.config['SECRET_KEY'],
+                            algorithms=['HS256'])['reset_password']
+        except:
+            return
+        return db.session.get(User, id)
 
 class Language(db.Model):
     __tablename__ = "language"

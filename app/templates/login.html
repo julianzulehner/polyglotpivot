@@ -15,7 +15,7 @@
             {% endif %}
         </p>
         <p>
-            {{ form.password.label(class="form=control-label") }}<br>
+            {{ form.password.label(class="form-control-label") }}<br>
             {% if form.password.errors %}
                 {{ form.password(class="form-control form-control-lg is-invalid") }} <br>
                 {% for error in form.password.errors %}
@@ -28,7 +28,7 @@
         <p>
             {{ form.remember_me.label(class="form=control-label")}}
             {{ form.remember_me(class="checkbox")}}
-            <!-- TODO: add forgot password request -->
+            <a href="{{ url_for('reset_password_request')}}"><span class="badge badge-primary">Forgot Password?</span></a>
         </p>
         <p>
             {{ form.submit(class="btn btn-outline-info")}}

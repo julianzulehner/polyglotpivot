@@ -1,11 +1,13 @@
 from app import app, db
 from flask import redirect, render_template, url_for, flash, request
-from app.forms import LoginForm, RegistrationForm, EditProfileForm, AddPostForm, AddVocableForm, PracticeForm, ConfigPracticeForm, EmptyForm
+from app.forms import LoginForm, RegistrationForm, EditProfileForm, AddPostForm, ResetPasswordForm
+from app.forms import AddVocableForm, PracticeForm, ConfigPracticeForm, EmptyForm, ResetPasswordRequestForm
 from flask_login import current_user, login_user, logout_user, login_required
 from urllib.parse import urlsplit
 import sqlalchemy as sa 
 from app.models import User, Post, Language, Vocable, Session
 from datetime import datetime, timezone
+from app.email import send_password_reset_email
 
 @app.route('/')
 @app.route('/index', methods=["GET","POST"])
@@ -37,6 +39,7 @@ def login():
             flash('Invalid username or password', 'danger')
             return redirect(url_for('login'))
         login_user(user, remember=form.remember_me.data)
+        print(f"REMEMBER ME: {form.remember_me.data}")
         next_page = request.args.get('next')
         if not next_page or urlsplit(next_page).netloc != '':
             next_page = url_for('index')
@@ -66,13 +69,7 @@ def register():
     return render_template("register.html", form=form)
 
 @app.route("/user/<username>")
-@login_required
-def user(username):
-    user = db.first_or_404(sa.select(User).where(User.username == username))
-    posts = db.session.scalars(user.posts.select()).all()
-    return render_template('user.html', user=user, posts=posts)
-
-@app.before_request
+@login_required  
 def before_request():
     if current_user.is_authenticated:
         current_user.last_seen = datetime.now(timezone.utc)
@@ -169,9 +166,34 @@ def new_vocable():
 
 @app.route("/reset_password_request", methods=["GET","POST"])
 def reset_password_request():
-    return render_template("reset_password_request.html")
+    if current_user.is_authenticated:
+        return redirect(url_for("index"))
+    form = ResetPasswordRequestForm()
+    if form.validate_on_submit():
+        user = db.session.scalar(sa.select(User).where(User.email == form.email.data))
+        if user:
+            send_password_reset_email(user)
+        flash('Check you email for the instructions to reset your password','success')
+        return redirect(url_for('login'))
+    return render_template('reset_password_request.html',form=form)
 
 @app.route("/edit_vocable/<vocable_id>", methods=["GET", "POST"])
+
+@app.route('/reset_password/<token>', methods=['GET','POST'])
+def reset_password(token):
+    if current_user.is_authenticated:
+        return redirect(url_for('index'))
+    user = User.verify_reset_password_token(token)
+    if not user:
+        return redirect(url_for('index'))
+    form = ResetPasswordForm()
+    if form.validate_on_submit():
+        user.set_password(form.password.data)
+        db.session.commit()
+        flash('Your password has been reset.','success')
+        return redirect(url_for('login'))
+    return render_template('reset_password.html',form=form)
+
 @login_required
 def edit_vocable(vocable_id):
     vocable = db.session.get(Vocable, vocable_id)
