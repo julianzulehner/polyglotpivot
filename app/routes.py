@@ -184,8 +184,6 @@ def reset_password_request():
         return redirect(url_for('login'))
     return render_template('reset_password_request.html',form=form)
 
-@app.route("/edit_vocable/<vocable_id>", methods=["GET", "POST"])
-
 @app.route('/reset_password/<token>', methods=['GET','POST'])
 def reset_password(token):
     if current_user.is_authenticated:
@@ -201,6 +199,7 @@ def reset_password(token):
         return redirect(url_for('login'))
     return render_template('reset_password.html',form=form)
 
+@app.route("/edit_vocable/<vocable_id>", methods=["GET", "POST"])
 @login_required
 def edit_vocable(vocable_id):
     vocable = db.session.get(Vocable, vocable_id)
