@@ -101,4 +101,8 @@ class ResetPasswordForm(FlaskForm):
     password2 = PasswordField('Repeat Password',validators=[DataRequired(), EqualTo('password')])
     submit = SubmitField('Request Password Reset')
 
+class CookieConsentForm(FlaskForm):
+    required = CheckboxInput("Required Cookies")
+    analytics = CheckboxInput("Analytics Cookies")
+    submit = SubmitField("Submit Cookie Selection")
 

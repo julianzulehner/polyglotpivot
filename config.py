@@ -15,3 +15,5 @@ class Config:
     ADMINS = ['polyglotpivot@gmail.com']
     POSTS_PER_PAGE = 5
     VOCABLES_PER_PAGE = 25
+    CONSENT_FULL_TEMPLATE= 'consent.html'
+    CONSENT_BANNER_TEMPLATE = 'consent_banner.html'

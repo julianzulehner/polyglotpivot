@@ -11,6 +11,7 @@
     <link rel="stylesheet" href="{{url_for('static', filename='custom.css')}}">
 
     <title>{% block title %} {% endblock %}</title>
+    
   </head>
   <body class="bg-light">
     <nav class="navbar navbar-expand-md navbar-light bg-secondary">
@@ -65,8 +66,11 @@
             {% endfor %}
           {% endif %}
         {% endwith %}
-        {% block content %} {% endblock %}
-    </div>
+        {% if cookies_check() %}
+          {% block content %} {% endblock %}
+        {% else %}
+          {% include "_cookie_selection.html" %}
+        {% endif %}
 
     <!-- Include BootstrapD JavaScript -->
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>

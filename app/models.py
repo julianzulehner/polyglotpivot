@@ -64,7 +64,7 @@ class User(UserMixin, db.Model):
         if level:
             return db.session.query(Vocable.id).filter(getattr(Vocable, language.iso + "_lvl") == level).order_by(func.random()).first()[0]
         else:
-            return db.session.query(Vocable.id).order_by(func.random()).first()[0]
+            return db.session.query(Vocable.id).where(Vocable.user_id == current_user.id).order_by(func.random()).first()[0]
 
     def get_reset_password_token(self, expires_in=600):
         return jwt.encode({'reset_password':self.id, 'exp':time()+ expires_in},

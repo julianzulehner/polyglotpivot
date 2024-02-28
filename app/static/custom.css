@@ -1,5 +1,3 @@
-
-
 .dot {
     width: 5px;
     height: 5px;
@@ -7,4 +5,71 @@
     background-color: #007bff;
     display: inline-block;
     margin-right: 5px;
+}
+
+*{
+    padding: 0;
+    margin: 0;
+}
+
+body{
+    font-size: 1rem;
+    font-family: 'Roboto', sans-serif;
+}
+
+.container{
+    width: 1600px;
+    margin: auto;
+}
+
+.subcontainer{
+    width: 85%;
+    margin: auto;
+}
+
+#cookies{
+    width:100%;
+    position: fixed;
+    bottom: 0;
+    color: white;
+    background-color: rgba(0,0,0,0.7);
+    z-index: 1;
+}
+
+.cookies{
+    min-height: 70px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.cookies a{
+    color: rgb(17, 136, 216);
+    font-weight: 500;
+    text-decoration: none;
+}
+
+#cookies-btn{
+    border-radius: 5px;
+    padding: 8px 12px 8px 12px;
+    font-size: 1rem;
+    font-family: inherit;
+    cursor: pointer;
+    border: 3px solid grey;
+    background-color: rgb(17, 136, 216);
+    color: white;
+}
+
+@media(max-width:1600px){
+    .container{
+        width: 100%;
+    }
+}
+
+@media(max-width:1024px){
+    .cookies{
+        padding: 10px 0;
+    }
 }

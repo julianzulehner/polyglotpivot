@@ -1,4 +1,4 @@
-from flask import Flask
+from flask import Flask, request
 from config import Config 
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
@@ -8,8 +8,6 @@ import logging
 from logging.handlers import SMTPHandler, RotatingFileHandler 
 import os
 
-print(f"Database URI: {os.environ.get('DATABASE_URL')}")
-
 app = Flask(__name__)
 app.config.from_object(Config)
 db = SQLAlchemy(app)
@@ -17,6 +15,16 @@ migrate = Migrate(app, db)
 login = LoginManager(app)
 mail = Mail(app)
 login.login_view = 'login'
+
+@app.context_processor
+def inject_template_scope():
+    injections = dict()   
+    def cookies_check():
+        required_cookies = request.cookies.get('required_cookies_consent')
+        analytics_cookies = request.cookies.get('analytics_cookies_consent')
+        return required_cookies == 'true'
+    injections.update(cookies_check=cookies_check)
+    return injections
 
 if not app.debug:
 
