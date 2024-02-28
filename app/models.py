@@ -60,7 +60,13 @@ class User(UserMixin, db.Model):
         self.languages = new_languages
 
     def get_random_vocable(self, language:Language, level=None):
-            query = sa.select(Vocable.id).where(Vocable.user_id == self.id).order_by(func.random())
+            if level:
+                query = (sa.select(Vocable.id).where(sa.and_(Vocable.user_id == self.id,
+                            getattr(Vocable, language.iso) != "",
+                            getattr(Vocable, f"{language.iso}_lvl") == level)).order_by(func.random())
+)
+            else: 
+                query = sa.select(Vocable.id).where(Vocable.user_id == self.id).where(getattr(Vocable,language.iso) != "").order_by(func.random())
             return db.session.scalar(query)
 
     def get_reset_password_token(self, expires_in=600):
