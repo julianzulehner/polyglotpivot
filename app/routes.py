@@ -178,7 +178,11 @@ def new_vocable():
     target_language = db.session.get(Language, current_user.session.target_language_id)
     current_user.session.vocable_id = current_user.get_random_vocable(target_language)
     db.session.commit()
-    return redirect(url_for("practice"))
+    if current_user.session.vocable_id:
+        return redirect(url_for("practice"))
+    else:
+        flash("To practice, you first have to add vocabulary.", "danger")
+        return redirect(url_for("add_vocable"))
 
 @app.route("/reset_password_request", methods=["GET","POST"])
 def reset_password_request():

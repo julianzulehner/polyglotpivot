@@ -60,11 +60,8 @@ class User(UserMixin, db.Model):
         self.languages = new_languages
 
     def get_random_vocable(self, language:Language, level=None):
-
-        if level:
-            return db.session.query(Vocable.id).where(Vocable.user_id == self.id).filter(getattr(Vocable, language.iso + "_lvl") == level).order_by(func.random()).first()[0]
-        else:
-            return db.session.query(Vocable.id).where(Vocable.user_id == self.id).order_by(func.random()).first()[0]
+            query = sa.select(Vocable.id).where(Vocable.user_id == self.id).order_by(func.random())
+            return db.session.scalar(query)
 
     def get_reset_password_token(self, expires_in=600):
         return jwt.encode({'reset_password':self.id, 'exp':time()+ expires_in},
