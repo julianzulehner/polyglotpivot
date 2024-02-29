@@ -17,3 +17,11 @@ class Config:
     VOCABLES_PER_PAGE = 25
     CONSENT_FULL_TEMPLATE= 'consent.html'
     CONSENT_BANNER_TEMPLATE = 'consent_banner.html'
+    LANGUAGES = {'de':'German',
+                 'en':'English',
+                 'es':'Spanish', 
+                 'fr':'French',
+                 'it':'Italian',
+                 'nl':'Dutch',
+                 'pt':'Portuguese'}
+

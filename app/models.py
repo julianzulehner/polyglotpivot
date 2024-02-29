@@ -107,12 +107,15 @@ class Vocable(db.Model):
     de: so.Mapped[str] = so.mapped_column(sa.String(length=100), nullable=True)
     it: so.Mapped[str] = so.mapped_column(sa.String(length=100), nullable=True)
     es: so.Mapped[str] = so.mapped_column(sa.String(length=100), nullable=True)
+    pt: so.Mapped[str] = so.mapped_column(sa.String(length=100), nullable=True)
+    
     nl_lvl: so.Mapped[int] = so.mapped_column(default=0)
     en_lvl: so.Mapped[int] = so.mapped_column(default=0)
     fr_lvl: so.Mapped[int] = so.mapped_column(default=0)
     de_lvl: so.Mapped[int] = so.mapped_column(default=0)
     it_lvl: so.Mapped[int] = so.mapped_column(default=0)
     es_lvl: so.Mapped[int] = so.mapped_column(default=0)
+    pt_lvl: so.Mapped[int] = so.mapped_column(default=0)
     user_id: so.Mapped[int] = so.mapped_column(sa.ForeignKey('user.id'))
 
     user: so.Mapped['User']=so.relationship(back_populates='vocables')
