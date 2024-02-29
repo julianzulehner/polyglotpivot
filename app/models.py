@@ -172,7 +172,15 @@ class Session(db.Model):
         self.vocable_level = None 
         db.session.commit()
 
-    
+class Practice(db.Model):
+    __tablename__ = 'practice'
+
+    id: so.Mapped[int] = so.mapped_column(primary_key=True)
+    timestamp: so.Mapped[datetime] = so.mapped_column(default=lambda: datetime.now(timezone.utc))
+    iscorrect: so.Mapped[bool] = so.mapped_column(sa.Boolean, nullable=False)
+    vocable_id: so.Mapped[int] = so.mapped_column(sa.ForeignKey(Vocable.id),index=True)
+
+
 
     
 

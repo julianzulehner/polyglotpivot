@@ -132,6 +132,13 @@ def add_vocable():
         return redirect(url_for('add_vocable'))
     return render_template("add_vocable.html", form=form)
 
+@app.route("/delete_vocable/<vocable_id>",methods=["GET"])
+@login_required
+def delete_vocable(vocable_id):
+    db.session.delete(db.session.get(Vocable,vocable_id))
+    db.session.commit()
+    return redirect(url_for('vocabulary'))
+
 @app.route("/practice", methods=["GET","POST"])
 @login_required
 def practice(): 
@@ -229,4 +236,4 @@ def edit_vocable(vocable_id):
             return redirect(url_for("vocabulary"))  # Adjust the redirect URL as needed
     else:
         return redirect(url_for("index"))
-    return render_template("edit_vocable.html", form=form)
+    return render_template("edit_vocable.html", form=form, vocable_id=vocable_id)

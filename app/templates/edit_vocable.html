@@ -20,6 +20,8 @@
    {% endfor %}
     <p>
         {{ form.submit()}}
+        <a href="{{url_for('delete_vocable',vocable_id=vocable_id)}}"><span class="badge badge-primary">Delete</span></a>
     </p>
+    
 </form>
 {% endblock %}
