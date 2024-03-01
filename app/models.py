@@ -69,6 +69,20 @@ class User(UserMixin, db.Model):
                 query = sa.select(Vocable.id).where(Vocable.user_id == self.id).where(getattr(Vocable,language.iso) != "").order_by(func.random())
             return db.session.scalar(query)
 
+    def get_due_vocable(self, source_language:Language, target_language:Language, level:int|None=None) -> Vocable:
+        '''
+        Returns the vocable that was not practiced for the longest time according
+        to the database entry of the Practice table.
+        '''
+        #TODO: implement 
+        pass
+
+    def check_if_studied(self):
+        '''
+        Checks if a Vocable was already studied before.
+        '''
+        return True if self.practices else False
+            
     def get_reset_password_token(self, expires_in=600):
         return jwt.encode({'reset_password':self.id, 'exp':time()+ expires_in},
                           app.config['SECRET_KEY'], algorithm='HS256')
@@ -117,8 +131,10 @@ class Vocable(db.Model):
     es_lvl: so.Mapped[int] = so.mapped_column(default=0)
     pt_lvl: so.Mapped[int] = so.mapped_column(default=0)
     user_id: so.Mapped[int] = so.mapped_column(sa.ForeignKey('user.id'))
-
+    
+    practices: so.Mapped[list['Practice']]=so.relationship(back_populates='vocable')
     user: so.Mapped['User']=so.relationship(back_populates='vocables')
+
 
     
     def __repr__(self):
@@ -131,12 +147,19 @@ class Vocable(db.Model):
             db.session.commit()
 
     def check_result(self, answer:str, targetlanguage:Language):
-        if answer == self.__getattribute__(targetlanguage.iso): 
+        if answer == getattr(self, targetlanguage.iso): 
             self.rise_level(targetlanguage)
+            self.add_practice(True)
             return True
         return False 
 
-
+    def add_practice(self, isanswercorrect:bool) -> None:
+        '''
+        Adds a practice entry to the practice table.
+        '''
+        practice = Practice(iscorrect=isanswercorrect,vocable_id=self.id)
+        self.practices.append(practice)
+        db.session.commit()
     
         
     
@@ -178,7 +201,11 @@ class Practice(db.Model):
     id: so.Mapped[int] = so.mapped_column(primary_key=True)
     timestamp: so.Mapped[datetime] = so.mapped_column(default=lambda: datetime.now(timezone.utc))
     iscorrect: so.Mapped[bool] = so.mapped_column(sa.Boolean, nullable=False)
-    vocable_id: so.Mapped[int] = so.mapped_column(sa.ForeignKey(Vocable.id),index=True)
+    vocable_id: so.Mapped[int] = so.mapped_column(sa.ForeignKey(Vocable.id))
+
+    vocable: so.Mapped['Vocable']=so.relationship(back_populates='practices')
+
+
 
 
 

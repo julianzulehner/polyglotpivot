@@ -160,7 +160,7 @@ def practice():
         if result:
             flash("Your answer is correct!", "success")
         else: 
-            flash(f"The right answer would be: {vocable.__getattribute__(target_language.iso)}.", "danger") 
+            flash(f"The right answer would be: {getattr(vocable, target_language.iso)}.", "danger") 
       
     return render_template("practice.html",form=form,target_language = target_language, source_language = source_language, vocable=vocable)
 
