@@ -6,11 +6,11 @@
     "configurations": [
         {
             "name": "Python: Flask",
-            "type": "python",
+            "type": "debugpy",
             "request": "launch",
             "module": "flask",
             "env": {
-                "FLASK_APP": "microblog.py",
+                "FLASK_APP": "polyglotpivot.py",
                 "FLASK_DEBUG": "1"
             },
             "args": [

@@ -1,3 +1,8 @@
+"""
+This module contains all sqlalchemy ORM classes to handle database objects of the 
+polyglotpivot project. 
+"""
+
 from __future__ import annotations
 
 from datetime import datetime, timezone
@@ -8,13 +13,16 @@ import sqlalchemy.orm as so
 from flask_login import UserMixin
 from app import db, login, app
 from hashlib import md5
-import random
 from sqlalchemy.sql.expression import func 
 from time import time
 import jwt
 
 @login.user_loader 
-def load_user(id): 
+def load_user(id: int|str) -> User|None:
+    """
+    Returns the current_user object. 
+    This function is needed when using flask-login extension.
+    """
     return db.session.get(User, int(id))
 
 user_language = sa.Table('user_language', 
@@ -44,29 +52,47 @@ class User(UserMixin, db.Model):
     def __repr__(self) -> str:
         return f'<User {self.username}>'
     
-    def set_password(self, password):
+    def set_password(self:User, password:str) -> None:
+        """
+        Sets the password hash to the User instance.
+        """
         self.password_hash = generate_password_hash(password)
     
-    def check_password(self, password): 
+    def check_password(self:User, password:str) -> bool: 
+        '''
+        Checks if User password is right and returns True or False.
+        This is used during the login procedure.
+        '''
         return check_password_hash(self.password_hash, password)
     
-    def avatar(self, size):
-        digest = md5(self.email.lower().encode('utf-8')).hexdigest()
-        return f"https://www.gravatar.com/avatar/{digest}?d=identicon&s={size}"
     
-    def set_languages(self, languages:list):
+    def set_languages(self: User, languages:list[str]) -> None:
+        '''
+        Sets the languages a User has. The argument languages is a list of
+        languages as string e.g ['English','German']. It is important that
+        that there is an entry in the Vocable table with the corresponding
+        Vocable.name
+        '''
         query = sa.select(Language).where(Language.name.in_(languages))
         new_languages = db.session.scalars(query).all()
         self.languages = new_languages
+        db.session.commit()
 
-    def get_random_vocable(self, language:Language, level=None):
+    def get_random_vocable(self: User, source_language:Language, target_language:Language, level:int|None=None):
+            '''
+            Returns a random instance of class Vocable of a User. By setting the level argument one can 
+            filter for the level. The level can be from 0 (new) to 6 (learned). It only returns vocable
+            that are both defined in target and source language.
+            '''
             if level:
-                query = (sa.select(Vocable.id).where(sa.and_(Vocable.user_id == self.id,
-                            getattr(Vocable, language.iso) != "",
-                            getattr(Vocable, f"{language.iso}_lvl") == level)).order_by(func.random())
-)
+                query = sa.select(Vocable.id).where(sa.and_(Vocable.user_id == self.id,
+                            getattr(Vocable, target_language.iso) != "",
+                            getattr(Vocable, source_language.iso) != "",
+                            getattr(Vocable, f"{target_language.iso}_lvl") == level)).order_by(func.random())
             else: 
-                query = sa.select(Vocable.id).where(Vocable.user_id == self.id).where(getattr(Vocable,language.iso) != "").order_by(func.random())
+                query = sa.select(Vocable.id).where(sa.and_(Vocable.user_id == self.id,
+                            getattr(Vocable,target_language.iso) != "",
+                            getattr(Vocable,source_language.iso) != "")).order_by(func.random())
             return db.session.scalar(query)
 
     def get_due_vocable(self, source_language:Language, target_language:Language, level:int|None=None) -> Vocable:
@@ -76,12 +102,6 @@ class User(UserMixin, db.Model):
         '''
         #TODO: implement 
         pass
-
-    def check_if_studied(self):
-        '''
-        Checks if a Vocable was already studied before.
-        '''
-        return True if self.practices else False
             
     def get_reset_password_token(self, expires_in=600):
         return jwt.encode({'reset_password':self.id, 'exp':time()+ expires_in},
@@ -161,9 +181,19 @@ class Vocable(db.Model):
         self.practices.append(practice)
         db.session.commit()
     
+    def check_if_studied(self:Vocable) -> bool:
+        '''
+        Checks if a Vocable was already studied before. And returns
+        True or False.
+        '''
+        return True if self.practices else False
         
     
 class Post(db.Model):
+    '''
+    The class post defines the post table. A post is a message a user (class:User) can 
+    create. 
+    '''
     __tablename__="post"
 
     id: so.Mapped[int] = so.mapped_column(primary_key=True)
