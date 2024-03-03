@@ -203,7 +203,7 @@ class Vocable(db.Model): # type: ignore
     pt_lvl: so.Mapped[int] = so.mapped_column(default=0)
     user_id: so.Mapped[int] = so.mapped_column(sa.ForeignKey('user.id'))
     
-    practices: so.Mapped[list['Practice']]=so.relationship(back_populates='vocable')
+    practices: so.Mapped[list['Practice']]=so.relationship(back_populates='vocable', cascade="all, delete")
     user: so.Mapped['User']=so.relationship(back_populates='vocables')
 
 
