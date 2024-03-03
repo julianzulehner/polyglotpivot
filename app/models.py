@@ -109,12 +109,12 @@ class User(UserMixin, db.Model): # type: ignore
             that are both defined in target and source language.
             '''
             if level:
-                query = sa.select(Vocable.id).where(sa.and_(Vocable.user_id == self.id,
+                query = sa.select(Vocable).where(sa.and_(Vocable.user_id == self.id,
                             getattr(Vocable, target_language.iso) != "",
                             getattr(Vocable, source_language.iso) != "",
                             getattr(Vocable, f"{target_language.iso}_lvl") == level)).order_by(func.random())
             else: 
-                query = sa.select(Vocable.id).where(sa.and_(Vocable.user_id == self.id,
+                query = sa.select(Vocable).where(sa.and_(Vocable.user_id == self.id,
                             getattr(Vocable,target_language.iso) != "",
                             getattr(Vocable,source_language.iso) != "")).order_by(func.random())
             return db.session.scalar(query)
