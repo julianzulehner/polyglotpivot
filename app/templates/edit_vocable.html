@@ -19,7 +19,7 @@
     </p>
    {% endfor %}
     <p>
-        {{ form.submit()}}
+        {{ form.submit(class="btn btn-outline-info")}}
         <a href="{{url_for('delete_vocable',vocable_id=vocable_id)}}"><span class="badge badge-primary">Delete</span></a>
     </p>
     
