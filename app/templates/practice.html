@@ -11,13 +11,23 @@
         {% endif %}
         <a href={{ url_for('config_practice') }} class="badge text-bg-secondary">Change Language</a>
     </p>
+    {% if next_vocable_autofocus %}
     <p>
         {{ form.your_answer(class="form-control-lg form-control")}}
     </p>
     <p>
         {{ form.submit(class="btn btn-outline-info") }}
+        <a href={{ url_for('new_vocable') }} class="btn btn-outline-info" autofocus>New Vocable</a>
+    </p>
+    {% else %}
+    <p>
+        {{ form.your_answer(class="form-control-lg form-control",autofocus=True)}}
+    </p>
+    <p>
+        {{ form.submit(class="btn btn-outline-info") }}
         <a href={{ url_for('new_vocable') }} class="btn btn-outline-info">New Vocable</a>
     </p>
+    {% endif %}
     
 </form>
 {% endblock %}

@@ -86,7 +86,7 @@ class ConfigPracticeForm(FlaskForm):
     submit = SubmitField()
 
 class PracticeForm(FlaskForm):
-    your_answer = StringField("Your Answer",validators=[Length(max=200)], widget=TextArea())
+    your_answer = StringField("Your Answer",validators=[Length(max=200)])
     submit = SubmitField()
 
 class EmptyForm(FlaskForm):
