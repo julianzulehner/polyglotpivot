@@ -145,7 +145,7 @@ def practice():
     form = PracticeForm()
     result = None
     vocable = None
-
+    next_vocable_autofocus = False
     if not current_user.session.target_language_id:
         return redirect(url_for("config_practice"))
     
@@ -155,14 +155,14 @@ def practice():
     if form.submit.data and form.validate():
         if not current_user.session.vocable_id:
             redirect(url_for("new_vocable"))
-
         result = vocable.check_result_and_set_level(form.your_answer.data, target_language) 
         if result:
             flash("Your answer is correct!", "success")
+            next_vocable_autofocus = True
         else: 
             flash(f'The right answer would be: "{getattr(vocable, target_language.iso)}"', "danger") 
       
-    return render_template("practice.html",form=form,target_language = target_language, source_language = source_language, vocable=vocable)
+    return render_template("practice.html",form=form,target_language = target_language, source_language = source_language, vocable=vocable, next_vocable_autofocus=next_vocable_autofocus)
 
 @app.route("/config_practice", methods=["GET","POST"])
 @login_required

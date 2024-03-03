@@ -11,3 +11,4 @@ env
 tmp
 __pycache__
 env.sh
+launch.json
