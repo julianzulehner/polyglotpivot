@@ -231,7 +231,6 @@ class Vocable(db.Model): # type: ignore
             setattr(self,language.iso + "_lvl", current_level-1)
             db.session.commit()
 
-
     def check_result_and_set_level(self:Vocable, answer:str, target_language:Language) -> bool:
         '''
         Checks a vocable practice. If the given answer of the user is correct it returns
@@ -247,7 +246,6 @@ class Vocable(db.Model): # type: ignore
             self.add_practice(False, target_language)
         db.session.commit()
         return answer_correct
-
 
     def add_practice(self, isanswercorrect:bool, language:Language) -> None:
         '''
