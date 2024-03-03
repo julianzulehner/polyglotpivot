@@ -1,0 +1,29 @@
+.dot {
+    width: 5px;
+    height: 5px;
+    border-radius: 50%;
+    background-color: #007bff;
+    display: inline-block;
+    margin-right: 5px;
+}
+
+*{
+    padding: 0;
+    margin: 0;
+}
+
+body{
+    font-size: 1rem;
+    font-family: 'Roboto', sans-serif;
+}
+
+.container{
+    width: 1600px;
+    margin: auto;
+}
+
+.subcontainer{
+    width: 85%;
+    margin: auto;
+}
+
