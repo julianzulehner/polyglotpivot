@@ -5,7 +5,7 @@
     {{ form.hidden_tag() }}
     <p>
         {% if vocable %}
-        Translate "{{ vocable.__getattribute__(source_language.iso) }}" to {{ target_language.name }}
+        <b>"{{ vocable.__getattribute__(source_language.iso) }}"</b> > {{ target_language.name }}
         {% else %}   
         Press New Vocable to start.
         {% endif %}

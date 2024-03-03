@@ -156,7 +156,7 @@ def practice():
         if not current_user.session.vocable_id:
             redirect(url_for("new_vocable"))
 
-        result = vocable.check_result(form.your_answer.data, target_language) 
+        result = vocable.check_result_and_set_level(form.your_answer.data, target_language) 
         if result:
             flash("Your answer is correct!", "success")
         else: 
@@ -183,7 +183,9 @@ def config_practice():
 @login_required
 def new_vocable():
     target_language = db.session.get(Language, current_user.session.target_language_id)
-    current_user.session.vocable_id = current_user.get_random_vocable(target_language)
+    source_language = db.session.get(Language, current_user.session.source_language_id)
+    res = current_user.get_due_vocable(source_language, target_language)
+    current_user.session.vocable_id =res[0].id
     db.session.commit()
     if current_user.session.vocable_id:
         return redirect(url_for("practice"))
