@@ -184,7 +184,7 @@ def config_practice():
 def new_vocable():
     target_language = db.session.get(Language, current_user.session.target_language_id)
     source_language = db.session.get(Language, current_user.session.source_language_id)
-    res = current_user.get_due_vocable(source_language, target_language)
+    res = current_user.get_due_vocable(source_language, target_language)[0]
     current_user.session.vocable_id =res.id
     db.session.commit()
     if current_user.session.vocable_id:
