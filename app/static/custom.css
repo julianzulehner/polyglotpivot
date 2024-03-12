@@ -7,7 +7,7 @@
     margin-right: 5px;
 }
 
-*{
+/* *{
     padding: 0;
     margin: 0;
 }
@@ -18,12 +18,12 @@ body{
 }
 
 .container{
-    width: 1600px;
+    max-width: 1200px;
     margin: auto;
 }
 
 .subcontainer{
-    width: 85%;
+    max-width: 85vb;
     margin: auto;
-}
+} */
 

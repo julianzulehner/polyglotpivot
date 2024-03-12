@@ -21,7 +21,7 @@
     </p>
     {% else %}
     <p>
-        {{ form.your_answer(class="form-control-lg form-control",autofocus=True)}}
+        {{ form.your_answer(class="form-control-lg form-control",autofocus=True, autocomplete="off")}}
     </p>
     <p>
         {{ form.submit(class="btn btn-outline-info") }}
