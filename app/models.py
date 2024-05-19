@@ -138,9 +138,7 @@ class User(UserMixin, db.Model): # type: ignore
         subsubquery = sa.Select(Practice).filter(Practice.language_id == target_language.id).subquery()
 
         # Get the practice entries with the latest timestamp for each vocable
-        subquery = sa.select(
-            subsubquery, sa.func.max(subsubquery.c.timestamp).label("latest_timestamp"))\
-            .group_by(subsubquery.c.vocable_id).subquery()
+        subquery = sa.select(subsubquery.c.vocable_id, sa.func.max(subsubquery.c.timestamp).label("latest_timestamp")).group_by(subsubquery.c.vocable_id).subquery()
         
         # join vocable and practices as left outer join (vocables without practice will be in the list)
         stmt = db.session.query(Vocable, subquery.c.latest_timestamp)\
