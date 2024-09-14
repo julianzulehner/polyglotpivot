@@ -1,4 +1,5 @@
 certs/
+config_mailserver.sh
 venv/
 .env
 app.db
