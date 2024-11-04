@@ -27,21 +27,25 @@
         </div>  
         {% include "_pagination.html" %}
     {% else %}
-        <h1> Welcome to Polyglotpivot </h1>
-        <p> 
-            Do you speak multiple languages or want to? Then you are in the right place.
-            Polyglotpivot gives you the possibility to keep track of your vocabulary. 
-            You can add your own vocabulary and practice them. 
-        </p>
-        <p>
-            Polyglotpivot is also a place to exchange with other language students. You can 
-            share your experiences, expressions or a funny story of your last vacation. Everything
-            is allowed - just be respectfull.
-        </p>
-        <p>
-            To start, just register an account and you can directly start. It is free, so there is no 
-            reason to hesitate. Try it out now. <br>
-        </p>
+    <h1>Welcome to Polyglotpivot</h1>
+    <p>
+        Polyglotpivot is a free vocabulary trainer specifically designed to help 
+        you track and fill gaps in your vocabulary, especially if you speak 
+        multiple languages.
+    </p>
+    <p>
+        As a private project, Polyglotpivot ensures all your data and vocabulary 
+        entries are stored locally and will never be used or published. However, 
+        it is always good practice to only share information you are comfortable 
+        making public.
+    </p>
+    <p>
+        To get started, simply register an account and dive right in. Your 
+        feedback and ideas for improvement are always welcome. Feel free to post 
+        in the home section of the website (visible once logged in) or send an 
+        email to polyglotpivot@gmail.com.
+    </p>
+    
         <a href="{{url_for('register')}}"><span class="btn btn-outline-info">Register Here</span></a>
     {% endif %}
 {% endblock %}
