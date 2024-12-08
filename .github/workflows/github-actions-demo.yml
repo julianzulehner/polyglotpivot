@@ -1,5 +1,6 @@
 on:
     [push]
+
 jobs:
     run_pull:
         name: run pull
