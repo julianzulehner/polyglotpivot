@@ -1,8 +1,5 @@
 on:
-    push:
-        branches:
-            -main
-
+    [push]
 jobs:
     run_pull:
         name: run pull
@@ -18,4 +15,5 @@ jobs:
               run: ssh ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} -p${{ secrets.SSH_PORT }} "cd ${{ secrets.WORK_DIR }} && git checkout ${{ secrets.MAIN_BRANCH }} && git pull"
             - name: cleanup
               run: rm -rf ~/.ssh
+
 
