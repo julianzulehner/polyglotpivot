@@ -7,11 +7,6 @@
     margin-right: 5px;
 }
 
-{
-    padding: 50px;
-    margin: 0;
-}
-
 body{
     font-size: 1rem;
     font-family: 'Roboto', sans-serif;
@@ -25,5 +20,5 @@ body{
 .subcontainer{
     max-width: 85vb;
     margin: auto;
-} */
+} 
 

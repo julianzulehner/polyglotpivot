@@ -1,7 +1,10 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<h1>{% block title %} Create Vocable {% endblock %}</h1>
+<h1>{% block title %} Create Vocable {% endblock %}
+<a href="{{ url_for('main.vocabulary')}}">
+<div class="badge badge-primary" style="font-size: 1rem; vertical-align: middle;">Edit</div>
+</a></h1>
 
 <form method="post">
     {{ form.hidden_tag() }}

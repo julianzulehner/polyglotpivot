@@ -1,7 +1,6 @@
 import os 
-os.environ['DATABASE_URL'] = 'sqlite://'
 import unittest
-from app import app, db 
+from app import db, create_app
 from app.models import User, Vocable, Practice, Language, Post 
 from config import Config
 
@@ -20,11 +19,15 @@ def helper_create_user_with_data():
     user.vocables.append(vocable)
     db.session.commit()
     
+class TestConfig(Config):
+    TESTING = True
+    SQLALCHEMY_DATABASE_URI = 'sqlite://'
     
 class UserModelCase(unittest.TestCase):
 
     def setUp(self):
-        self.app_context = app.app_context()
+        self.app = create_app(TestConfig)
+        self.app_context = self.app.app_context()
         self.app_context.push()
         db.create_all()
     

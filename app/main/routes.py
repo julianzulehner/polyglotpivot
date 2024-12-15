@@ -1,5 +1,5 @@
-from app import app, db
-from flask import redirect, render_template, url_for, flash, request
+from app import db
+from flask import redirect, render_template, url_for, flash, request, current_app
 from app.main.forms import EditProfileForm, AddPostForm
 from app.main.forms import AddVocableForm, PracticeForm, ConfigPracticeForm, EmptyForm
 from flask_login import current_user, login_required
@@ -34,7 +34,7 @@ def index():
         flash("This website is under active development.","info")
     page = request.args.get('page', 1, type=int)
     query = sa.select(Post).order_by(Post.timestamp.desc())
-    posts = db.paginate(query ,page=page, per_page=app.config["POSTS_PER_PAGE"], error_out=False)
+    posts = db.paginate(query ,page=page, per_page=current_app.config["POSTS_PER_PAGE"], error_out=False)
     next_url = url_for('main.index', page=posts.next_num) if posts.has_next else None
     prev_url = url_for('main.index', page=posts.prev_num) if posts.has_prev else None
     return render_template("index.html", title="Home", posts=posts.items, form=form, next_url=next_url, prev_url=prev_url)
@@ -52,7 +52,7 @@ def before_request():
 def vocabulary():
     page = request.args.get('page', 1, type=int)
     query = sa.select(Vocable).where(Vocable.user_id == current_user.id)
-    vocables = db.paginate(query, page=page, per_page=app.config["VOCABLES_PER_PAGE"], error_out=False)
+    vocables = db.paginate(query, page=page, per_page=current_app.config["VOCABLES_PER_PAGE"], error_out=False)
     next_url = url_for('main.vocabulary', page=vocables.next_num) if vocables.has_next else None
     prev_url = url_for('main.vocabulary', page=vocables.prev_num) if vocables.has_prev else None
     return render_template("vocabulary.html",title="Your Vocabulary", vocables=vocables, next_url=next_url, prev_url=prev_url)
@@ -125,13 +125,14 @@ def config_practice():
 def new_vocable():
     target_language = db.session.get(Language, current_user.session.target_language_id)
     source_language = db.session.get(Language, current_user.session.source_language_id)
-    res = current_user.get_due_vocable(source_language, target_language)[0]
-    current_user.session.vocable_id =res.id
-    db.session.commit()
-    if current_user.session.vocable_id:
+    res = current_user.get_due_vocable(source_language, target_language)
+    if res:
+        current_user.session.vocable_id = res[0].id
+        db.session.commit()
         return redirect(url_for("main.practice"))
     else:
-        flash("To practice, you first have to add vocabulary.", "danger")
+        flash("To practice, you first have to add vocabulary or edit existing" \
+            " entries.", "danger")
         return redirect(url_for("main.add_vocable"))
 
 @bp.route("/edit_vocable/<vocable_id>", methods=["GET", "POST"])

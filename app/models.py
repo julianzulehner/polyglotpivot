@@ -11,11 +11,12 @@ from typing import Optional
 import sqlalchemy as sa 
 import sqlalchemy.orm as so
 from flask_login import UserMixin
-from app import db, login, app
+from app import db, login
 from hashlib import md5
 from sqlalchemy.sql.expression import func 
 from time import time
 import jwt
+from flask import current_app
 
 @login.user_loader 
 def load_user(id: int|str) -> User|None:
@@ -161,12 +162,12 @@ class User(UserMixin, db.Model): # type: ignore
             
     def get_reset_password_token(self, expires_in=600):
         return jwt.encode({'reset_password':self.id, 'exp':time()+ expires_in},
-                          app.config['SECRET_KEY'], algorithm='HS256')
+                          current_app.config['SECRET_KEY'], algorithm='HS256')
     
     @staticmethod
     def verify_reset_password_token(token):
         try:
-            id = jwt.decode(token, app.config['SECRET_KEY'],
+            id = jwt.decode(token, current_app.config['SECRET_KEY'],
                             algorithms=['HS256'])['reset_password']
         except:
             return

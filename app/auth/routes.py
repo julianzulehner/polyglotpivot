@@ -1,4 +1,4 @@
-from app import app, db
+from app import db
 from flask import redirect, render_template, url_for, flash, request
 from app.auth.forms import LoginForm, RegistrationForm, ResetPasswordForm, \
     ResetPasswordRequestForm, EditProfileForm
