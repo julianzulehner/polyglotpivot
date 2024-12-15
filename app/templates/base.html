@@ -15,7 +15,7 @@
   </head>
   <body class="bg-light">
     <nav class="navbar navbar-expand-md navbar-light bg-secondary">
-        <a class="navbar-brand text-white" href="{{ url_for('index')}}"><img src="{{ url_for('static', filename='polyglot_pivot_logo.svg') }}" width="80" height="80"></a>
+        <a class="navbar-brand text-white" href="{{ url_for('main.index')}}"><img src="{{ url_for('static', filename='polyglot_pivot_logo.svg') }}" width="80" height="80"></a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
@@ -24,13 +24,13 @@
               {% if current_user.is_anonymous %}
               {% else %}     
               <li class="nav-item active"> 
-                <a class="nav-link text-white" href="{{url_for('vocabulary')}}">Vocabulary</a>
+                <a class="nav-link text-white" href="{{url_for('main.vocabulary')}}">Vocabulary</a>
               </li>
               <li class="nav-item active"> 
-                <a class="nav-link text-white" href="{{url_for('practice')}}">Practice</a>
+                <a class="nav-link text-white" href="{{url_for('main.practice')}}">Practice</a>
               </li>
               <li class="nav-item">
-                <a class="nav-link text-white" href="{{url_for('add_vocable')}}">Add</a>
+                <a class="nav-link text-white" href="{{url_for('main.add_vocable')}}">Add</a>
               </li> 
               {% endif %}
             </ul>
@@ -39,17 +39,17 @@
             <ul class="navbar-nav ml-auto">
               {% if current_user.is_anonymous %}
               <li class="nav-item active"> 
-                <a class="nav-link text-white" href="{{url_for('login')}}">Login</a>
+                <a class="nav-link text-white" href="{{url_for('auth.login')}}">Login</a>
               </li>
               <li class="nav-item active"> 
-                <a class="nav-link text-white" href="{{url_for('register')}}">Register</a>
+                <a class="nav-link text-white" href="{{url_for('auth.register')}}">Register</a>
               </li>
               {% else %}   
               <li class="nav-item active"> 
-                <a class="nav-link text-white" href="{{url_for('edit_profile')}}">Edit Profile</a>
+                <a class="nav-link text-white" href="{{url_for('auth.edit_profile')}}">Edit Profile</a>
               </li>
               <li class="nav-item active"> 
-                <a class="nav-link text-white" href="{{url_for('logout')}}">Logout</a>
+                <a class="nav-link text-white" href="{{url_for('auth.logout')}}">Logout</a>
               </li>
               {% endif %}
             </ul>

@@ -34,6 +34,15 @@ user_language = sa.Table('user_language',
 
 
 class User(UserMixin, db.Model): # type: ignore
+    """Creates new user instance for database 
+    
+    Args:
+    username (string)
+    email (string)
+    password (string)
+    
+    Returns:
+    """
     __tablename__ = "user"
 
     id: so.Mapped[int] = so.mapped_column(primary_key=True)
@@ -124,10 +133,10 @@ class User(UserMixin, db.Model): # type: ignore
         Returns the vocable that was not practiced for the longest time according
         to the database entry of the Practice table.
         '''
-        return self.get_query_of_vocables_with_latest_timestamp(source_language, target_language).first()
+        return self._get_query_of_vocables_with_latest_timestamp(source_language, target_language).first()
 
 
-    def get_query_of_vocables_with_latest_timestamp(self: User, source_language:Language, target_language:Language) -> sa.orm.Query.query:
+    def _get_query_of_vocables_with_latest_timestamp(self: User, source_language:Language, target_language:Language) -> sa.orm.Query.query:
         '''
         Returns a query object which can be either used as further subquery or to get results.
         For example using one(), all(), first(), etc. The query will give all entries in vocable for a 

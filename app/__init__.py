@@ -14,7 +14,7 @@ db = SQLAlchemy(app)
 migrate = Migrate(app, db)
 login = LoginManager(app)
 mail = Mail(app)
-login.login_view = 'login'
+login.login_view = 'auth.login'
 
 @app.context_processor
 def inject_template_scope():
@@ -55,6 +55,13 @@ if not app.debug:
     app.logger.setLevel(logging.INFO)
     app.logger.info('Polyglotpivot startup')
 
-    
-from app import routes, models, errors 
+from app.errors import bp as errors_bp
+from app.auth import bp as auth_bp
+from app.main import bp as main_bp
+
+app.register_blueprint(errors_bp)
+app.register_blueprint(auth_bp, url_prefix="/auth")
+app.register_blueprint(main_bp, url_prefix="/main")
+
+from app import models
 

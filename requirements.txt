@@ -18,3 +18,4 @@ Flask-Consent>=0.0.3
 gunicorn==20.1.0
 cryptography==3.4.8
 PyMySQL==1.1.1
+gTTS==2.5.4

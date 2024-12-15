@@ -9,7 +9,7 @@
         {% else %}   
         Press New Vocable to start.
         {% endif %}
-        <a href={{ url_for('config_practice') }} class="badge text-bg-secondary">Change Language</a>
+        <a href={{ url_for('main.config_practice') }} class="badge text-bg-secondary">Change Language</a>
     </p>
     {% if next_vocable_autofocus %}
     <p>
@@ -17,7 +17,7 @@
     </p>
     <p>
         {{ form.submit(class="btn btn-outline-info") }}
-        <a href={{ url_for('new_vocable') }} class="btn btn-outline-info" autofocus>New Vocable</a>
+        <a href={{ url_for('main.new_vocable') }} class="btn btn-outline-info" autofocus>New Vocable</a>
     </p>
     {% else %}
     <p>
@@ -25,7 +25,7 @@
     </p>
     <p>
         {{ form.submit(class="btn btn-outline-info") }}
-        <a href={{ url_for('new_vocable') }} class="btn btn-outline-info">New Vocable</a>
+        <a href={{ url_for('main.new_vocable') }} class="btn btn-outline-info">New Vocable</a>
     </p>
     {% endif %}
     
